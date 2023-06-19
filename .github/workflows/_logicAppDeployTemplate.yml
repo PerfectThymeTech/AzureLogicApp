@@ -1,4 +1,4 @@
-name: Function App Deploy Template
+name: Logic App Deploy Template
 
 on:
   workflow_call:
@@ -36,7 +36,7 @@ permissions:
 
 jobs:
   deployment:
-    name: Function App Deploy
+    name: Logic App Deploy
     runs-on: self-hosted
     continue-on-error: false
     environment: ${{ inputs.environment }}

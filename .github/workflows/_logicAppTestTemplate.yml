@@ -1,4 +1,4 @@
-name: Function App Test Template
+name: Logic App Test Template
 
 on:
   workflow_call:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   deployment:
-    name: Function App Test
+    name: Logic App Test
     runs-on: ubuntu-latest
     continue-on-error: false
 
