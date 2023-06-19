@@ -65,13 +65,6 @@ jobs:
           echo "zip logic app content"
           zip -r ./../../output/logic.zip .
 
-      # - name: 'Upload Artifact'
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: logic
-      #     path: "./output/logic.zip"
-      #     retention-days: 1
-
       # Deploy Logic App
       - name: Deploy Logic App
         id: logic_deploy
@@ -79,5 +72,3 @@ jobs:
         with:
           app-name: ${{ inputs.logic_app_name }}
           package: "./output/logic.zip"
-          # scm-do-build-during-deployment: false
-          # enable-oryx-build: false
