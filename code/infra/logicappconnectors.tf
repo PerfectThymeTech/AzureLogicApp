@@ -38,11 +38,13 @@ resource "azapi_resource" "api_connection_arm_access_policy" {
   location  = var.location
 
   body = jsonencode({
-    principal = {
-      type = "ActiveDirectory"
-      identity = {
-        tenantId = azurerm_logic_app_standard.logic_app.identity[0].tenant_id
-        objectId = azurerm_logic_app_standard.logic_app.identity[0].principal_id
+    properties = {
+      principal = {
+        type = "ActiveDirectory"
+        identity = {
+          tenantId = azurerm_logic_app_standard.logic_app.identity[0].tenant_id
+          objectId = azurerm_logic_app_standard.logic_app.identity[0].principal_id
+        }
       }
     }
   })
