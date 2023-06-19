@@ -1,8 +1,4 @@
 {
-  "uriPath": {
-    "type": "String",
-    "value": "/v1/myworkflow"
-  },
   "MY_CONFIG": {
     "type": "String",
     "value": "@appsetting('MY_CONFIG')"

@@ -79,7 +79,7 @@
             }
           },
           "method": "POST",
-          "relativePath": "@parameters('uriPath')"
+          "relativePath": "/v1/myworkflow"
         }
       }
     }
