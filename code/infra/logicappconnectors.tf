@@ -11,11 +11,13 @@ resource "azurerm_api_connection" "api_connection_arm" {
   display_name   = "AzureResourceManagerApiConnection"
   managed_api_id = data.azurerm_managed_api.managed_api_arm.id
   parameter_values = {
-    "managedIdentityAuth" = {}
+    managedIdentityAuth = {}
   }
 
   lifecycle {
     # NOTE: since the connectionString is a secure value it's not returned from the API
-    ignore_changes = ["parameter_values"]
+    ignore_changes = [
+      parameter_values
+    ]
   }
 }
