@@ -30,11 +30,3 @@ jobs:
 
           echo "zip logic app content"
           zip -r ./../../output/logic.zip .
-
-      - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v3
-        with:
-          name: logic
-          path: "./output/logic.zip"
-          retention-days: 1
-  
