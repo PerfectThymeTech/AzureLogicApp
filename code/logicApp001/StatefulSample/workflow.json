@@ -12,7 +12,7 @@
           }
         },
         "runAfter": {
-          "List_resource_providers": [
+          "List_subscriptions": [
             "SUCCEEDED"
           ]
         }
@@ -46,7 +46,7 @@
           ]
         }
       },
-      "List_resource_providers": {
+      "List_subscriptions": {
         "type": "ApiConnection",
         "inputs": {
           "host": {
@@ -55,7 +55,7 @@
             }
           },
           "method": "get",
-          "path": "/subscriptions/@{encodeURIComponent(parameters('MY_AZURE_SUBSCRIPTION'))}/providers",
+          "path": "/subscriptions",
           "queries": {
             "x-ms-api-version": "2016-06-01"
           }
