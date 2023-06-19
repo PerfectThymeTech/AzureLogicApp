@@ -35,5 +35,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: logic
-          path: "./output/logic.zip"
+          path: "./output"
           retention-days: 1
