@@ -1,0 +1,39 @@
+{
+  "managedApiConnections": {
+    "arm": {
+      "api": {
+        "id": "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/providers/Microsoft.Web/locations/northeurope/managedApis/arm"
+      },
+      "connection": {
+        "id": "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mylogic-dev-app-rg/providers/Microsoft.Web/connections/mylogic-dev-api-arm001"
+      },
+      "connectionRuntimeUrl": "https://4450576190f59d42.04.common.logic-northeurope.azure-apihub.net/apim/arm/2d9eb53fd7c64da3a8df0f0de8687d18/",
+      "authentication": {
+        "type": "Raw",
+        "scheme": "Key",
+        "parameter": "@appsetting('ARM_CONNECTION_KEY')"
+      },
+      "connectionProperties": {
+        "authentication": {
+          "type": "ManagedServiceIdentity",
+          "audience": "https://management.core.windows.net/"
+        }
+      }
+    }
+  },
+  "serviceProviderConnections": {
+    "keyVault": {
+      "parameterValues": {
+        "VaultUri": "@appsetting('KEY_VAULT_URI')",
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
+        }
+      },
+      "parameterSetName": "ManagedServiceIdentity",
+      "serviceProvider": {
+        "id": "/serviceProviders/keyVault"
+      },
+      "displayName": "key-vault-connection"
+    }
+  }
+}
