@@ -34,8 +34,9 @@ resource "azapi_resource" "api_connection_arm" {
 resource "azapi_resource" "api_connection_arm_access_policy" {
   type      = "Microsoft.Web/connections/accessPolicies@2016-06-01"
   parent_id = azapi_resource.api_connection_arm.id
-  name      = azurerm_logic_app_standard.logic_app.name
+  name      = azurerm_logic_app_standard.logic_app.identity[0].principal_id
   location  = var.location
+
   body = jsonencode({
     principal = {
       type = "ActiveDirectory"
