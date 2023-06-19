@@ -41,6 +41,11 @@ resource "azapi_resource" "api_connection_arm" {
       customParameterValues = {}
       # nonSecretParameterValues = {}
       # parameterValues = {}
+      parameterValueType = "Alternative"
+      parameterValueSet = {
+        name   = "managedIdentityAuth"
+        values = {}
+      }
       testLinks = []
     }
   })
