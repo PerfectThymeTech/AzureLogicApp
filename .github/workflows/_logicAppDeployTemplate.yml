@@ -53,7 +53,8 @@ jobs:
 
           echo "zip logic app content"
           zip -r ${{ inputs.logic_app_directory }}/../output/logic.zip ${{ inputs.logic_app_directory }}/.
-
+      
+      - run: az --version
       # Login to Azure
       - name: Azure Login
         id: azure_login
