@@ -26,11 +26,13 @@ resource "azapi_resource" "api_connection_arm" {
       testLinks             = []
     }
   })
+
+  schema_validation_enabled = false
 }
 
 resource "azapi_resource" "api_connection_arm_access_policy" {
   type      = "Microsoft.Web/connections/accessPolicies@2016-06-01"
-  parent_id = azurerm_api_connection.api_connection_arm.id
+  parent_id = azapi_resource.api_connection_arm.id
   name      = azurerm_logic_app_standard.logic_app.name
   location  = var.location
   body = jsonencode({
@@ -42,5 +44,6 @@ resource "azapi_resource" "api_connection_arm_access_policy" {
       }
     }
   })
+
   schema_validation_enabled = false
 }
