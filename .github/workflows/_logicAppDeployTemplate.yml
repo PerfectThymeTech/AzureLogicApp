@@ -47,16 +47,6 @@ jobs:
         id: checkout_repository
         uses: actions/checkout@v3
 
-      # Package Logic App
-      - name: Package Logic App
-        id: logic_app_package
-        run: |
-          echo "Create outputs directory..."
-          mkdir -p ${{ inputs.logic_app_directory }}/../output
-
-          echo "zip logic app content"
-          zip -r ${{ inputs.logic_app_directory }}/../output/logic.zip ${{ inputs.logic_app_directory }}/.
-      
       # Login to Azure
       - name: Azure Login
         id: azure_login
@@ -64,12 +54,22 @@ jobs:
         with:
           creds:  '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
+      # Package Logic App
+      - name: Package Logic App
+        id: logic_app_package
+        run: |
+          echo "Create outputs directory..."
+          mkdir -p ./output
+
+          echo "zip logic app content"
+          zip -r ./output/logic.zip ${{ inputs.logic_app_directory }}
+
       # Deploy Logic App
       - name: Deploy Logic App
         id: logic_deploy
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ inputs.logic_app_name }}
-          package: ${{ inputs.logic_app_directory }}/../output/logic.zip
+          package: "./output/logic.zip"
           scm-do-build-during-deployment: false
           enable-oryx-build: false
