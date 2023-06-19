@@ -23,9 +23,18 @@ jobs:
       # Package Logic App
       - name: Package Logic App
         id: logic_app_package
+        working-directory: ${{ inputs.logic_app_directory }}
         run: |
           echo "Create outputs directory..."
-          mkdir -p ${{ inputs.logic_app_directory }}/../output
+          mkdir -p ./../../output
 
           echo "zip logic app content"
-          zip -r ${{ inputs.logic_app_directory }}/../output/logic.zip ${{ inputs.logic_app_directory }}/.
+          zip -r ./../../output/logic.zip .
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: logic
+          path: "./output/logic.zip"
+          retention-days: 1
+  
