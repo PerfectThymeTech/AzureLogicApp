@@ -62,27 +62,6 @@ variable "route_table_id" {
   }
 }
 
-variable "function_python_version" {
-  description = "Specifies the python version of the Azure Function."
-  type        = string
-  sensitive   = false
-  default     = "3.10"
-  validation {
-    condition     = contains(["3.9", "3.10"], var.function_python_version)
-    error_message = "Please specify a valid Python version."
-  }
-}
-
-variable "function_health_path" {
-  description = "Specifies the health endpoint of the Azure Function."
-  type        = string
-  sensitive   = false
-  validation {
-    condition     = startswith(var.function_health_path, "/")
-    error_message = "Please specify a valid path."
-  }
-}
-
 variable "private_dns_zone_id_blob" {
   description = "Specifies the resource ID of the private DNS zone for Azure Storage blob endpoints. Not required if DNS A-records get created via Azue Policy."
   type        = string

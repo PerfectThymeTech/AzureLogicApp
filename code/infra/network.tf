@@ -51,4 +51,8 @@ resource "azapi_resource" "subnet_services" {
       serviceEndpoints        = []
     }
   })
+
+  depends_on = [
+    azapi_resource.subnet_logic_app
+  ]
 }

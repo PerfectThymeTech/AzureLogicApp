@@ -5,61 +5,77 @@ resource "azurerm_service_plan" "service_plan" {
   tags                = var.tags
 
   maximum_elastic_worker_count = 20
-  os_type                  = "Windows"
-  per_site_scaling_enabled = false
-  sku_name                 = "WS1"
-  worker_count             = 3
-  zone_balancing_enabled   = true
+  os_type                      = "Windows"
+  per_site_scaling_enabled     = false
+  sku_name                     = "WS1"
+  worker_count                 = 3
+  zone_balancing_enabled       = true
 }
 
 resource "azurerm_logic_app_standard" "logic_app" {
-  name = "${local.prefix}-la001"
-  location = var.location
+  name                = "${local.prefix}-la001"
+  location            = var.location
   resource_group_name = azurerm_resource_group.app_rg.name
-  tags = var.tags
+  tags                = var.tags
   identity {
     type = "SystemAssigned"
   }
 
-  app_service_plan_id = azurerm_service_plan.service_plan.id
-  bundle_version = "[1.*, 2.0.0)"
-  client_affinity_enabled = false
-  client_certificate_mode = "Required"
-  enabled = true
-  https_only = true
+  app_service_plan_id        = azurerm_service_plan.service_plan.id
+  bundle_version             = "[1.*, 2.0.0)"
+  client_affinity_enabled    = false
+  client_certificate_mode    = "Required"
+  enabled                    = true
+  https_only                 = true
   storage_account_access_key = azurerm_storage_account.storage.primary_access_key
-  storage_account_name = azurerm_storage_account.storage.name
+  storage_account_name       = azurerm_storage_account.storage.name
   storage_account_share_name = azapi_resource.storage_file_share.name
-  use_extension_bundle = true
-  version = "~4"
-  virtual_network_subnet_id = azapi_resource.subnet_function.id
+  use_extension_bundle       = true
+  version                    = "~4"
+  virtual_network_subnet_id  = azapi_resource.subnet_logic_app.id
   app_settings = {
     "FUNCTIONS_WORKER_RUNTIME"     = "node"
     "WEBSITE_NODE_DEFAULT_VERSION" = "~18"
+    "WEBSITE_CONTENTOVERVNET"      = "1"
   }
   site_config {
-    always_on = true
-    app_scale_limit = 
-    cors {
-      allowed_origins = []
-      support_credentials = false
-    }
-    dotnet_framework_version = 
+    always_on       = true
+    app_scale_limit = 0
+    # cors {
+    #   allowed_origins = []
+    #   support_credentials = false
+    # }
+    dotnet_framework_version = "v6.0"
+    elastic_instance_minimum = 1
+    ftps_state               = "Disabled"
+    # health_check_path = ""
+    http2_enabled                    = true
+    ip_restriction                   = []
+    min_tls_version                  = "1.2"
+    pre_warmed_instance_count        = 1
+    runtime_scale_monitoring_enabled = true
+    scm_ip_restriction               = []
+    scm_min_tls_version              = "1.2"
+    scm_type                         = "None"
+    scm_use_main_ip_restriction      = false
+    use_32_bit_worker_process        = false
+    vnet_route_all_enabled           = true
+    websockets_enabled               = false
   }
 }
 
-data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_function" {
-  resource_id = azapi_resource.function.id
+data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_logic_app" {
+  resource_id = azurerm_logic_app_standard.logic_app.id
 }
 
-resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
+resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_logic_app" {
   name                       = "logAnalytics"
-  target_resource_id         = azapi_resource.function.id
+  target_resource_id         = azurerm_logic_app_standard.logic_app.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
 
   dynamic "enabled_log" {
     iterator = entry
-    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_function.log_category_groups
+    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_logic_app.log_category_groups
     content {
       category_group = entry.value
       retention_policy {
@@ -71,7 +87,7 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
 
   dynamic "metric" {
     iterator = entry
-    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_function.metrics
+    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_logic_app.metrics
     content {
       category = entry.value
       enabled  = true
@@ -83,22 +99,22 @@ resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_function" {
   }
 }
 
-resource "azurerm_private_endpoint" "function_private_endpoint" {
-  name                = "${azapi_resource.function.name}-pe"
+resource "azurerm_private_endpoint" "logic_app_private_endpoint" {
+  name                = "${azurerm_logic_app_standard.logic_app.name}-pe"
   location            = var.location
   resource_group_name = azurerm_resource_group.app_rg.name
   tags                = var.tags
 
-  custom_network_interface_name = "${azapi_resource.function.name}-nic"
+  custom_network_interface_name = "${azurerm_logic_app_standard.logic_app.name}-nic"
   private_service_connection {
-    name                           = "${azapi_resource.function.name}-pe"
+    name                           = "${azurerm_logic_app_standard.logic_app.name}-pe"
     is_manual_connection           = false
-    private_connection_resource_id = azapi_resource.function.id
+    private_connection_resource_id = azurerm_logic_app_standard.logic_app.id
     subresource_names              = ["sites"]
   }
   subnet_id = azapi_resource.subnet_services.id
   private_dns_zone_group {
-    name = "${azapi_resource.function.name}-arecord"
+    name = "${azurerm_logic_app_standard.logic_app.name}-arecord"
     private_dns_zone_ids = [
       var.private_dns_zone_id_sites
     ]

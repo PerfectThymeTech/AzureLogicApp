@@ -4,11 +4,11 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.60.0"
+      version = "3.61.0"
     }
     azapi = {
       source  = "azure/azapi"
-      version = "1.6.0"
+      version = "1.7.0"
     }
   }
 
@@ -17,9 +17,9 @@ terraform {
     subscription_id      = "8f171ff9-2b5b-4f0f-aed5-7fa360a1d094"
     resource_group_name  = "mycrp-prd-cicd"
     storage_account_name = "mycrpprdstg001"
-    container_name       = "function"
+    container_name       = "logic-app"
     key                  = "terraform.tfstate"
-    # use_oidc             = true
+    use_oidc             = true
   }
 }
 
@@ -28,7 +28,7 @@ provider "azurerm" {
   environment                    = "public"
   skip_provider_registration     = false
   storage_use_azuread            = true
-  # use_oidc                       = true
+  use_oidc                       = true
 
   features {
     key_vault {
@@ -49,5 +49,5 @@ provider "azapi" {
   disable_correlation_request_id = false
   environment                    = "public"
   skip_provider_registration     = false
-  # use_oidc                       = true
+  use_oidc                       = true
 }
