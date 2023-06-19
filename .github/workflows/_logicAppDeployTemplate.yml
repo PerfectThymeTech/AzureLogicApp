@@ -8,23 +8,31 @@ on:
         type: string
         default: "dev"
         description: "Specifies the environment of the deployment."
-      python_version:
-        required: true
-        type: string
-        default: "3.10"
-        description: "Specifies the python version."
-      logic_directory:
+      logic_app_directory:
         required: true
         type: string
         description: "Specifies the directory of the Azure Logic App."
-      function_name:
+      logic_app_name:
         required: true
         type: string
-        description: "Specifies the name of the Azure Function."
+        description: "Specifies the name of the Azure Logic App."
     secrets:
-      FUNCTION_PUBLISH_PROFILE:
+      TENANT_ID:
         required: true
-        description: "Specifies the publish profile of the function."
+        description: "Specifies the tenant id of the deployment."
+      CLIENT_ID:
+        required: true
+        description: "Specifies the client id."
+      CLIENT_SECRET:
+        required: true
+        description: "Specifies the client secret."
+      SUBSCRIPTION_ID:
+        required: true
+        description: "Specifies the client id."
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   deployment:
@@ -34,35 +42,33 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
-      # Setup Python 3.10
-      - name: Setup Python 3.10
-        id: python_setup
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ inputs.python_version }}
-
       # Check Out Repository
       - name: Check Out Repository
         id: checkout_repository
         uses: actions/checkout@v3
 
-      # Install Logic App Dependencies
-      - name: Resolve Logic App Dependencies
-        id: logic_dependencies
-        shell: bash
+      # Login to Azure
+      - name: Azure Login
+        id: azure_login
+        uses: azure/login@v1
+        with:
+          creds:  '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+
+      # Package Logic App
+      - name: Package Logic App
+        id: logic_app_package
+        working-directory: ${{ inputs.logic_app_directory }}
         run: |
-          pushd '${{ inputs.function_directory }}'
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
-          popd
+          echo "Create outputs directory..."
+          mkdir -p ./../../output
+
+          echo "zip logic app content"
+          zip -r ./../../output/logic.zip .
 
       # Deploy Logic App
       - name: Deploy Logic App
         id: logic_deploy
         uses: Azure/functions-action@v1
         with:
-          app-name: ${{ inputs.function_name }}
-          package: ${{ inputs.function_directory }}
-          publish-profile: ${{ secrets.FUNCTION_PUBLISH_PROFILE }}
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+          app-name: ${{ inputs.logic_app_name }}
+          package: "./output/logic.zip"

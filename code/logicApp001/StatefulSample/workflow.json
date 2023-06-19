@@ -1,0 +1,88 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "List_secrets": {
+        "type": "ServiceProvider",
+        "inputs": {
+          "serviceProviderConfiguration": {
+            "connectionName": "keyVault",
+            "operationId": "listSecretMetadata",
+            "serviceProviderId": "/serviceProviders/keyVault"
+          }
+        },
+        "runAfter": {
+          "List_subscriptions": [
+            "SUCCEEDED"
+          ]
+        }
+      },
+      "InitializeMyConfig": {
+        "type": "InitializeVariable",
+        "inputs": {
+          "variables": [
+            {
+              "name": "myConfig",
+              "type": "string",
+              "value": "@{parameters('MY_CONFIG')}"
+            }
+          ]
+        },
+        "runAfter": {
+          "List_secrets": [
+            "SUCCEEDED"
+          ]
+        }
+      },
+      "SetMyConfig": {
+        "type": "SetVariable",
+        "inputs": {
+          "name": "myConfig",
+          "value": "@{parameters('MY_SECRET_CONFIG')}"
+        },
+        "runAfter": {
+          "InitializeMyConfig": [
+            "SUCCEEDED"
+          ]
+        }
+      },
+      "List_subscriptions": {
+        "type": "ApiConnection",
+        "inputs": {
+          "host": {
+            "connection": {
+              "referenceName": "arm"
+            }
+          },
+          "method": "get",
+          "path": "/subscriptions",
+          "queries": {
+            "x-ms-api-version": "2016-06-01"
+          }
+        },
+        "runAfter": {}
+      }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "triggers": {
+      "HttpTrigger": {
+        "type": "Request",
+        "kind": "Http",
+        "inputs": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string"
+              }
+            }
+          },
+          "method": "POST",
+          "relativePath": "/v1/myworkflow"
+        }
+      }
+    }
+  },
+  "kind": "Stateful"
+}
