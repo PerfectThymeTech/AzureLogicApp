@@ -65,4 +65,5 @@ resource "azapi_resource" "api_connection_arm_access_policy" {
       }
     }
   })
+  schema_validation_enabled = false
 }
