@@ -28,6 +28,11 @@ resource "azurerm_key_vault_secret" "key_vault_secret_sample" {
 
   content_type = "text/plain"
   value        = var.my_secret
+
+  depends_on = [
+    azurerm_role_assignment.current_role_assignment_key_vault,
+    azurerm_private_endpoint.key_vault_private_endpoint
+  ]
 }
 
 data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_key_vault" {
