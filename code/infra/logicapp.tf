@@ -39,7 +39,7 @@ resource "azurerm_logic_app_standard" "logic_app" {
     "WEBSITE_CONTENTOVERVNET"      = "1"
   }
   site_config {
-    always_on       = true
+    always_on       = false
     app_scale_limit = 0
     # cors {
     #   allowed_origins = []
