@@ -32,6 +32,16 @@ variable "tags" {
   default     = {}
 }
 
+variable "my_secret" {
+  description = "Specifies a random secret value used in teh Logic App."
+  type        = string
+  sensitive   = true
+  validation {
+    condition     = length(var.my_secret) >= 2
+    error_message = "Please specify a valid resource ID."
+  }
+}
+
 variable "vnet_id" {
   description = "Specifies the resource ID of the Vnet used for the Azure Function."
   type        = string
