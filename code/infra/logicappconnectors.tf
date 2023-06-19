@@ -9,9 +9,9 @@ resource "azapi_resource" "api_connection_arm" {
   name      = "${local.prefix}-api-arm001"
   location  = var.location
   tags      = var.tags
-  kind      = "V2"
 
   body = jsonencode({
+    kind = "V2"
     properties = {
       api = {
         name        = data.azurerm_managed_api.managed_api_arm.name
@@ -22,7 +22,8 @@ resource "azapi_resource" "api_connection_arm" {
         id          = data.azurerm_managed_api.managed_api_arm.id
         type        = "Microsoft.Web/locations/managedApis"
       }
-      customParameterValues = {}
+      customParameterValues = {},
+      parameterValueType    = "Alternative"
       testLinks             = []
     }
   })
