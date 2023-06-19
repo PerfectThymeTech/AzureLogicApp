@@ -4,20 +4,20 @@ on:
     branches:
       - main
     paths:
-      - "**.py"
+      - "code/logicApp001/**"
 
   pull_request:
     branches:
       - main
     paths:
-      - "**.py"
+      - "code/logicApp001/**"
 
 jobs:
   function_test:
     uses: ./.github/workflows/_logicAppTestTemplate.yml
     name: "Function App Test"
     with:
-      logic_app_directory: "./code/logicApp001" 
+      logic_app_directory: "./code/logicApp001"
 
   function_deploy:
     uses: ./.github/workflows/_logicAppDeployTemplate.yml

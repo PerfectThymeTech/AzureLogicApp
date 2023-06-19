@@ -47,7 +47,7 @@ jobs:
         run: |
           echo "Create outputs directory..."
           mkdir -p ${{ inputs.logic_app_directory }}/../output
-          
+
           echo "zip logic app content"
           zip -r ${{ inputs.logic_app_directory }}/../output/logic.zip ${{ inputs.logic_app_directory }}
 

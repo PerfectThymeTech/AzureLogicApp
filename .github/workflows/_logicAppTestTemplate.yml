@@ -27,6 +27,6 @@ jobs:
         run: |
           echo "Create outputs directory..."
           mkdir -p ../output
-          
+
           echo "zip logic app content"
           zip -r ../output/logic.zip .
