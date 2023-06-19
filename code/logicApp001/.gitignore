@@ -2,6 +2,7 @@
 # Azure Functions artifacts
 bin
 obj
+workflow-designtime
 appsettings.json
 local.settings.json
 __blobstorage__
