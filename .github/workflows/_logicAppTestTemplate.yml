@@ -23,10 +23,9 @@ jobs:
       # Package Logic App
       - name: Package Logic App
         id: logic_app_package
-        working-directory: ${{ inputs.logic_app_directory }}
         run: |
           echo "Create outputs directory..."
-          mkdir -p ../output
+          mkdir -p ${{ inputs.logic_app_directory }}/../output
 
           echo "zip logic app content"
-          zip -r ../output/logic.zip .
+          zip -r ${{ inputs.logic_app_directory }}/../output/logic.zip ${{ inputs.logic_app_directory }}/.
