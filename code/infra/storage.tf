@@ -45,7 +45,7 @@ resource "azurerm_storage_account" "storage" {
     publish_microsoft_endpoints = false
   }
   sftp_enabled              = false
-  shared_access_key_enabled = false
+  shared_access_key_enabled = true
 }
 
 resource "azurerm_storage_management_policy" "storage_management_policy" {
