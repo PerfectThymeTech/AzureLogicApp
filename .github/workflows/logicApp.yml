@@ -1,4 +1,4 @@
-name: Function App Deployment
+name: Logic App Deployment
 on:
   push:
     branches:
@@ -13,16 +13,16 @@ on:
       - "code/logicApp001/**"
 
 jobs:
-  function_test:
+  logic_app_test:
     uses: ./.github/workflows/_logicAppTestTemplate.yml
-    name: "Function App Test"
+    name: "Logic App Test"
     with:
       logic_app_directory: "./code/logicApp001"
 
-  function_deploy:
+  logic_app_deploy:
     uses: ./.github/workflows/_logicAppDeployTemplate.yml
-    name: "Function App Deploy"
-    needs: [function_test]
+    name: "Logic App Deploy"
+    needs: [logic_app_test]
     # if: github.event_name == 'push' || github.event_name == 'release'
     with:
       environment: "dev"
