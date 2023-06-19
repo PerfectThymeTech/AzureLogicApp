@@ -45,10 +45,10 @@ resource "azurerm_logic_app_standard" "logic_app" {
     #   allowed_origins = []
     #   support_credentials = false
     # }
-    dotnet_framework_version = "v6.0"
-    elastic_instance_minimum = 1
-    ftps_state               = "Disabled"
     # health_check_path = ""
+    dotnet_framework_version         = "v6.0"
+    elastic_instance_minimum         = 3
+    ftps_state                       = "Disabled"
     http2_enabled                    = true
     ip_restriction                   = []
     min_tls_version                  = "1.2"
