@@ -34,9 +34,11 @@ resource "azurerm_logic_app_standard" "logic_app" {
   version                    = "~4"
   virtual_network_subnet_id  = azapi_resource.subnet_logic_app.id
   app_settings = {
-    "FUNCTIONS_WORKER_RUNTIME"     = "node"
-    "WEBSITE_NODE_DEFAULT_VERSION" = "~18"
-    "WEBSITE_CONTENTOVERVNET"      = "1"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.application_insights.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.application_insights.connection_string
+    "FUNCTIONS_WORKER_RUNTIME"              = "node"
+    "WEBSITE_NODE_DEFAULT_VERSION"          = "~18"
+    "WEBSITE_CONTENTOVERVNET"               = "1"
   }
   site_config {
     always_on       = false
