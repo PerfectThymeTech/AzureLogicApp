@@ -39,6 +39,7 @@ resource "azurerm_logic_app_standard" "logic_app" {
     "FUNCTIONS_WORKER_RUNTIME"              = "node"
     "WEBSITE_NODE_DEFAULT_VERSION"          = "~18"
     "WEBSITE_CONTENTOVERVNET"               = "1"
+    "WEBSITE_RUN_FROM_PACKAGE"              = "1"
 
     # Generic Workflow settings
     "ServiceProviders.MaximumAllowedTriggerStateSizeInKB" = "10"
