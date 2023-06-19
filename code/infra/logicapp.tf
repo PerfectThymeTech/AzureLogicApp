@@ -39,6 +39,16 @@ resource "azurerm_logic_app_standard" "logic_app" {
     "FUNCTIONS_WORKER_RUNTIME"              = "node"
     "WEBSITE_NODE_DEFAULT_VERSION"          = "~18"
     "WEBSITE_CONTENTOVERVNET"               = "1"
+
+    # Generic Workflow settings
+    "ServiceProviders.MaximumAllowedTriggerStateSizeInKB" = "10"
+    "Workflows.RuntimeConfiguration.RetentionInDays"      = "90"
+
+    # Specific Workflow settings
+    "KEY_VAULT_URI"         = azurerm_key_vault.key_vault.vault_uri
+    "MY_CONFIG"             = "value"
+    "MY_SECRET_CONFIG"      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.key_vault_secret_sample.id})"
+    "MY_AZURE_SUBSCRIPTION" = data.azurerm_client_config.current.subscription_id
   }
   site_config {
     always_on       = false
