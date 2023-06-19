@@ -13,10 +13,10 @@ on:
         type: string
         default: "3.10"
         description: "Specifies the python version."
-      function_directory:
+      logic_directory:
         required: true
         type: string
-        description: "Specifies the directory of the Azure Function."
+        description: "Specifies the directory of the Azure Logic App."
       function_name:
         required: true
         type: string
@@ -46,9 +46,9 @@ jobs:
         id: checkout_repository
         uses: actions/checkout@v3
 
-      # Install Function Dependencies
-      - name: Resolve Function Dependencies
-        id: function_dependencies
+      # Install Logic App Dependencies
+      - name: Resolve Logic App Dependencies
+        id: logic_dependencies
         shell: bash
         run: |
           pushd '${{ inputs.function_directory }}'
@@ -56,9 +56,9 @@ jobs:
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
           popd
 
-      # Deploy Function
-      - name: Deploy Function
-        id: function_deploy
+      # Deploy Logic App
+      - name: Deploy Logic App
+        id: logic_deploy
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ inputs.function_name }}
