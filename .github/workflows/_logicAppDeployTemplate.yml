@@ -71,5 +71,5 @@ jobs:
         with:
           app-name: ${{ inputs.logic_app_name }}
           package: "./output/logic.zip"
-          scm-do-build-during-deployment: false
-          enable-oryx-build: false
+          # scm-do-build-during-deployment: false
+          # enable-oryx-build: false
