@@ -8,8 +8,43 @@ resource "azurerm_service_plan" "service_plan" {
   os_type                      = "Windows"
   per_site_scaling_enabled     = false
   sku_name                     = "WS1"
-  worker_count                 = 3
-  zone_balancing_enabled       = true
+  worker_count                 = 1     # Update to '3' for production
+  zone_balancing_enabled       = false # Update to 'true' for production
+}
+
+data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_service_plan" {
+  resource_id = azurerm_service_plan.service_plan.id
+}
+
+resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_service_plan" {
+  name                       = "logAnalytics"
+  target_resource_id         = azurerm_service_plan.service_plan.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
+
+  dynamic "enabled_log" {
+    iterator = entry
+    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.log_category_groups
+    content {
+      category_group = entry.value
+      retention_policy {
+        enabled = true
+        days    = 30
+      }
+    }
+  }
+
+  dynamic "metric" {
+    iterator = entry
+    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.metrics
+    content {
+      category = entry.value
+      enabled  = true
+      retention_policy {
+        enabled = true
+        days    = 30
+      }
+    }
+  }
 }
 
 resource "azurerm_logic_app_standard" "logic_app" {

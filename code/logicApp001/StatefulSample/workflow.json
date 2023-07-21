@@ -82,6 +82,23 @@
           "relativePath": "/v1/myworkflow"
         }
       }
+    },
+    "parameters": {
+      "MY_CONFIG": {
+        "type": "String",
+        "value": "@appsetting('MY_CONFIG')",
+        "defaultValue": "@appsetting('MY_CONFIG')"
+      },
+      "MY_SECRET_CONFIG": {
+        "type": "String",
+        "value": "@appsetting('MY_SECRET_CONFIG')",
+        "defaultValue": "@appsetting('MY_SECRET_CONFIG')"
+      },
+      "MY_AZURE_SUBSCRIPTION": {
+        "type": "String",
+        "value": "@appsetting('MY_AZURE_SUBSCRIPTION')",
+        "defaultValue": "@appsetting('MY_AZURE_SUBSCRIPTION')"
+      }
     }
   },
   "kind": "Stateful"
