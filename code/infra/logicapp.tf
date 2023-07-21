@@ -8,8 +8,8 @@ resource "azurerm_service_plan" "service_plan" {
   os_type                      = "Windows"
   per_site_scaling_enabled     = false
   sku_name                     = "WS1"
-  worker_count                 = 1  # Update to '3' for production
-  zone_balancing_enabled       = false  # Update to 'true' for production
+  worker_count                 = 1     # Update to '3' for production
+  zone_balancing_enabled       = false # Update to 'true' for production
 }
 
 resource "azurerm_logic_app_standard" "logic_app" {
