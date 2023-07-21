@@ -7,7 +7,7 @@
       "connection": {
         "id": "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mylogic-dev-app-rg/providers/Microsoft.Web/connections/mylogic-dev-api-arm001"
       },
-      "connectionRuntimeUrl": "https://4450576190f59d42.04.common.logic-northeurope.azure-apihub.net/apim/arm/3ffb57864750430398cf966096293267/",
+      "connectionRuntimeUrl": "https://4450576190f59d42.04.common.logic-northeurope.azure-apihub.net/apim/arm/e9684bb97a4d4f27814e6d358e30c4d2/",
       "authentication": {
         "type": "ManagedServiceIdentity"
       },
