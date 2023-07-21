@@ -5,12 +5,14 @@ on:
       - main
     paths:
       - "code/logicApp001/**"
+      - ".github/workflows/logicApp.yml"
 
   pull_request:
     branches:
       - main
     paths:
       - "code/logicApp001/**"
+      - ".github/workflows/logicApp.yml"
 
 jobs:
   logic_app_test:
@@ -23,7 +25,7 @@ jobs:
     uses: ./.github/workflows/_logicAppDeployTemplate.yml
     name: "Logic App Deploy"
     needs: [logic_app_test]
-    if: github.event_name == 'push' || github.event_name == 'release'
+    # if: github.event_name == 'push' || github.event_name == 'release'
     with:
       environment: "dev"
       logic_app_directory: "code/logicApp001"
