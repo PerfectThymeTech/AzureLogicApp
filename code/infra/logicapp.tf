@@ -95,7 +95,7 @@ resource "azurerm_logic_app_standard" "logic_app" {
     # }
     # health_check_path = ""
     dotnet_framework_version         = "v6.0"
-    elastic_instance_minimum         = 1
+    elastic_instance_minimum         = 1 # Update to '3' for production
     ftps_state                       = "Disabled"
     http2_enabled                    = true
     ip_restriction                   = []
