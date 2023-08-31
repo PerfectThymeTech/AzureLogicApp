@@ -19,6 +19,7 @@ terraform {
     storage_account_name = "mycrpprdstg001"
     container_name       = "logic-app"
     key                  = "terraform.tfstate"
+    use_azuread_auth     = true
     # use_oidc             = true
   }
 }
