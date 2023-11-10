@@ -56,14 +56,14 @@ jobs:
       # Setup Node
       - name: Setup Node
         id: node_setup
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16
 
       # Setup Terraform
       - name: Setup Terraform
         id: terraform_setup
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ inputs.terraform_version }}
           terraform_wrapper: true
