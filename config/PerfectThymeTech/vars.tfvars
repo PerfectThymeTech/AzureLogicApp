@@ -2,7 +2,6 @@ location                              = "northeurope"
 environment                           = "dev"
 prefix                                = "mylogic"
 tags                                  = {}
-my_secret                             = ""
 vnet_id                               = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mycrp-prd-logic-network-rg/providers/Microsoft.Network/virtualNetworks/mycrp-prd-logic-vnet001"
 nsg_id                                = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mycrp-prd-logic-network-rg/providers/Microsoft.Network/networkSecurityGroups/mycrp-prd-logic-nsg001"
 route_table_id                        = "/subscriptions/8f171ff9-2b5b-4f0f-aed5-7fa360a1d094/resourceGroups/mycrp-prd-logic-network-rg/providers/Microsoft.Network/routeTables/mycrp-prd-logic-rt001"

@@ -33,12 +33,12 @@ variable "tags" {
 }
 
 variable "my_secret" {
-  description = "Specifies a random secret value used in teh Logic App."
+  description = "Specifies a random secret value used in the Logic App."
   type        = string
   sensitive   = true
   validation {
     condition     = length(var.my_secret) >= 2
-    error_message = "Please specify a valid resource ID."
+    error_message = "Please specify a valid secret."
   }
 }
 
