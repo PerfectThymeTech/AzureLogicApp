@@ -11,7 +11,7 @@ on:
 jobs:
   deployment:
     name: Logic App Test
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
     continue-on-error: false
 
     steps:
