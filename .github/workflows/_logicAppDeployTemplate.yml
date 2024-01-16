@@ -39,7 +39,7 @@ permissions:
 jobs:
   deployment:
     name: Logic App Deploy
-    runs-on: self-hosted
+    runs-on: [self-hosted]
     continue-on-error: false
     environment: ${{ inputs.environment }}
 
