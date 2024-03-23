@@ -64,7 +64,7 @@ resource "azurerm_logic_app_standard" "logic_app" {
     "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.application_insights.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.application_insights.connection_string
     "FUNCTIONS_WORKER_RUNTIME"              = "node"
-    "WEBSITE_NODE_DEFAULT_VERSION"          = "~18"
+    "WEBSITE_NODE_DEFAULT_VERSION"          = "~20"
     "WEBSITE_CONTENTOVERVNET"               = "1"
     "WEBSITE_RUN_FROM_PACKAGE"              = "1"
 
