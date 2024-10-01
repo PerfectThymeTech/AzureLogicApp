@@ -70,7 +70,7 @@ data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_logic_app" {
 resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_logic_app" {
   name                       = "logAnalytics"
   target_resource_id         = azurerm_logic_app_standard.logic_app.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
 
   dynamic "enabled_log" {
     iterator = entry
@@ -104,10 +104,19 @@ resource "azurerm_private_endpoint" "logic_app_private_endpoint" {
     subresource_names              = ["sites"]
   }
   subnet_id = azapi_resource.subnet_private_endpoints.id
-  private_dns_zone_group {
-    name = "${azurerm_logic_app_standard.logic_app.name}-arecord"
-    private_dns_zone_ids = [
-      var.private_dns_zone_id_sites
+  dynamic "private_dns_zone_group" {
+    for_each = var.private_dns_zone_id_sites == "" ? [] : [1]
+    content {
+      name = "${azurerm_logic_app_standard.logic_app.name}-arecord"
+      private_dns_zone_ids = [
+        var.private_dns_zone_id_sites
+      ]
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      private_dns_zone_group
     ]
   }
 }
