@@ -1,8 +1,8 @@
 # General variables
-location                              = "northeurope"
-environment                           = "dev"
-prefix                                = "seclogic"
-tags                                  = {}
+location    = "northeurope"
+environment = "dev"
+prefix      = "seclogic"
+tags        = {}
 
 # Monitoring variables
 log_analytics_workspace_id = "/subscriptions/e82c5267-9dc4-4f45-ac13-abdd5e130d27/resourceGroups/ptt-dev-logging-rg/providers/Microsoft.OperationalInsights/workspaces/ptt-dev-log001"
