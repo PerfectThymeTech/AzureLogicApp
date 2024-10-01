@@ -1,44 +1,3 @@
-resource "azurerm_service_plan" "service_plan" {
-  name                = "${local.prefix}-asp001"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.app_rg.name
-  tags                = var.tags
-
-  maximum_elastic_worker_count = 20
-  os_type                      = "Windows"
-  per_site_scaling_enabled     = false
-  sku_name                     = "WS1"
-  worker_count                 = 1     # Update to '3' for production
-  zone_balancing_enabled       = false # Update to 'true' for production
-}
-
-data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_service_plan" {
-  resource_id = azurerm_service_plan.service_plan.id
-}
-
-resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_service_plan" {
-  name                       = "logAnalytics"
-  target_resource_id         = azurerm_service_plan.service_plan.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
-
-  dynamic "enabled_log" {
-    iterator = entry
-    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.log_category_groups
-    content {
-      category_group = entry.value
-    }
-  }
-
-  dynamic "metric" {
-    iterator = entry
-    for_each = data.azurerm_monitor_diagnostic_categories.diagnostic_categories_service_plan.metrics
-    content {
-      category = entry.value
-      enabled  = true
-    }
-  }
-}
-
 resource "azurerm_logic_app_standard" "logic_app" {
   name                = "${local.prefix}-la001"
   location            = var.location
@@ -48,21 +7,21 @@ resource "azurerm_logic_app_standard" "logic_app" {
     type = "SystemAssigned"
   }
 
-  app_service_plan_id        = azurerm_service_plan.service_plan.id
+  app_service_plan_id        = module.app_service_plan.service_plan_id
   bundle_version             = "[1.*, 2.0.0)"
   client_affinity_enabled    = false
   client_certificate_mode    = "Required"
   enabled                    = true
   https_only                 = true
-  storage_account_access_key = azurerm_storage_account.storage.primary_access_key
-  storage_account_name       = azurerm_storage_account.storage.name
+  storage_account_access_key = module.storage_account.storage_account_primary_access_key
+  storage_account_name       = module.storage_account.storage_account_name
   storage_account_share_name = azapi_resource.storage_file_share.name
   use_extension_bundle       = true
   version                    = "~4"
   virtual_network_subnet_id  = azapi_resource.subnet_logic_app.id
   app_settings = {
-    "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.application_insights.instrumentation_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.application_insights.connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"        = module.application_insights.application_insights_instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = module.application_insights.application_insights_connection_string
     "FUNCTIONS_WORKER_RUNTIME"              = "node"
     "WEBSITE_NODE_DEFAULT_VERSION"          = "~18"
     "WEBSITE_CONTENTOVERVNET"               = "1"
@@ -73,7 +32,7 @@ resource "azurerm_logic_app_standard" "logic_app" {
     "Workflows.RuntimeConfiguration.RetentionInDays"      = "90"
 
     # Specific Workflow settings
-    "KEY_VAULT_URI"         = azurerm_key_vault.key_vault.vault_uri
+    "KEY_VAULT_URI"         = module.key_vault.key_vault_uri
     "MY_CONFIG"             = "value"
     "MY_SECRET_CONFIG"      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.key_vault_secret_sample.id})"
     "MY_AZURE_SUBSCRIPTION" = data.azurerm_client_config.current.subscription_id
@@ -111,7 +70,7 @@ data "azurerm_monitor_diagnostic_categories" "diagnostic_categories_logic_app" {
 resource "azurerm_monitor_diagnostic_setting" "diagnostic_setting_logic_app" {
   name                       = "logAnalytics"
   target_resource_id         = azurerm_logic_app_standard.logic_app.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics_workspace.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
 
   dynamic "enabled_log" {
     iterator = entry
@@ -144,11 +103,20 @@ resource "azurerm_private_endpoint" "logic_app_private_endpoint" {
     private_connection_resource_id = azurerm_logic_app_standard.logic_app.id
     subresource_names              = ["sites"]
   }
-  subnet_id = azapi_resource.subnet_services.id
-  private_dns_zone_group {
-    name = "${azurerm_logic_app_standard.logic_app.name}-arecord"
-    private_dns_zone_ids = [
-      var.private_dns_zone_id_sites
+  subnet_id = azapi_resource.subnet_private_endpoints.id
+  dynamic "private_dns_zone_group" {
+    for_each = var.private_dns_zone_id_sites == "" ? [] : [1]
+    content {
+      name = "${azurerm_logic_app_standard.logic_app.name}-arecord"
+      private_dns_zone_ids = [
+        var.private_dns_zone_id_sites
+      ]
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      private_dns_zone_group
     ]
   }
 }
