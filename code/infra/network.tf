@@ -31,7 +31,7 @@ resource "azapi_resource" "subnet_logic_app" {
 
 resource "azapi_resource" "subnet_private_endpoints" {
   type      = "Microsoft.Network/virtualNetworks/subnets@2022-07-01"
-  name      = "PeSubnet"
+  name      = "PeLogicAppSubnet"
   parent_id = data.azurerm_virtual_network.virtual_network.id
 
   body = jsonencode({
