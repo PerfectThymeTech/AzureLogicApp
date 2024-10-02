@@ -5,12 +5,14 @@ on:
       - main
     paths:
       - "code/logicApp001/**"
+      - ".github/workflows/logicApp.yml"
 
   pull_request:
     branches:
       - main
     paths:
       - "code/logicApp001/**"
+      - ".github/workflows/logicApp.yml"
 
 jobs:
   logic_app_test:
