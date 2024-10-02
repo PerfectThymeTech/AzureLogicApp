@@ -5,12 +5,14 @@ on:
       - main
     paths:
       - "code/logicApp001/**"
+      - ".github/workflows/logicApp.yml"
 
   pull_request:
     branches:
       - main
     paths:
       - "code/logicApp001/**"
+      - ".github/workflows/logicApp.yml"
 
 jobs:
   logic_app_test:
@@ -23,13 +25,12 @@ jobs:
     uses: ./.github/workflows/_logicAppDeployTemplate.yml
     name: "Logic App Deploy"
     needs: [logic_app_test]
-    if: github.event_name == 'push' || github.event_name == 'release'
+    # if: github.event_name == 'push' || github.event_name == 'release'
     with:
       environment: "dev"
       logic_app_directory: "code/logicApp001"
-      logic_app_name: "mylogic-dev-la001"
-      tenant_id: "3556be79-2979-4b19-a1af-4dd4e6d9ed7e"
-      subscription_id: "8f171ff9-2b5b-4f0f-aed5-7fa360a1d094"
+      logic_app_name: "seclogic-dev-la001"
+      tenant_id: "37963dd4-f4e6-40f8-a7d6-24b97919e452"
+      subscription_id: "1fdab118-1638-419a-8b12-06c9543714a0"
     secrets:
       CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
