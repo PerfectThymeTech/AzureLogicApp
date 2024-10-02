@@ -52,7 +52,7 @@ resource "azurerm_logic_app_standard" "logic_app" {
     ip_restriction                   = []
     min_tls_version                  = "1.2"
     pre_warmed_instance_count        = 1
-    public_network_access_enabled = false
+    public_network_access_enabled    = false
     runtime_scale_monitoring_enabled = true
     scm_ip_restriction               = []
     scm_min_tls_version              = "1.2"
