@@ -49,11 +49,11 @@ resource "azapi_resource" "storage_file_share" {
   name      = "logicapp"
   parent_id = "${module.storage_account.storage_account_id}/fileServices/default"
 
-  body = jsonencode({
+  body = {
     properties = {
       accessTier       = "TransactionOptimized"
       enabledProtocols = "SMB"
       shareQuota       = 5120
     }
-  })
+  }
 }

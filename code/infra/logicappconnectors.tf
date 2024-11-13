@@ -10,7 +10,7 @@ resource "azapi_resource" "api_connection_arm" {
   location  = var.location
   tags      = var.tags
 
-  body = jsonencode({
+  body = {
     kind = "V2"
     properties = {
       api = {
@@ -26,7 +26,7 @@ resource "azapi_resource" "api_connection_arm" {
       parameterValueType    = "Alternative"
       testLinks             = []
     }
-  })
+  }
 
   schema_validation_enabled = false
 }
@@ -37,7 +37,7 @@ resource "azapi_resource" "api_connection_arm_access_policy" {
   name      = "${azurerm_logic_app_standard.logic_app.name}-${azurerm_logic_app_standard.logic_app.identity[0].principal_id}"
   location  = var.location
 
-  body = jsonencode({
+  body = {
     properties = {
       principal = {
         type = "ActiveDirectory"
@@ -47,7 +47,7 @@ resource "azapi_resource" "api_connection_arm_access_policy" {
         }
       }
     }
-  })
+  }
 
   schema_validation_enabled = false
 }

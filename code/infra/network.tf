@@ -3,7 +3,7 @@ resource "azapi_resource" "subnet_logic_app" {
   name      = "LogicAppSubnet"
   parent_id = data.azurerm_virtual_network.virtual_network.id
 
-  body = jsonencode({
+  body = {
     properties = {
       addressPrefix = var.subnet_cidr_logic_app
       delegations = [
@@ -26,7 +26,7 @@ resource "azapi_resource" "subnet_logic_app" {
       serviceEndpointPolicies = []
       serviceEndpoints        = []
     }
-  })
+  }
 }
 
 resource "azapi_resource" "subnet_private_endpoints" {
@@ -34,7 +34,7 @@ resource "azapi_resource" "subnet_private_endpoints" {
   name      = "PeLogicAppSubnet"
   parent_id = data.azurerm_virtual_network.virtual_network.id
 
-  body = jsonencode({
+  body = {
     properties = {
       addressPrefix = var.subnet_cidr_private_endpoints
       delegations   = []
@@ -50,7 +50,7 @@ resource "azapi_resource" "subnet_private_endpoints" {
       serviceEndpointPolicies = []
       serviceEndpoints        = []
     }
-  })
+  }
 
   depends_on = [
     azapi_resource.subnet_logic_app
